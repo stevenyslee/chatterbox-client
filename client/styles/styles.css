@@ -5,6 +5,10 @@ body {
     font-family: arial, sans-serif;
 }
 
+h1 {
+    
+}
+
 #main {
     width: 700px;
     margin: auto;
@@ -16,11 +20,12 @@ body {
 }
 
 #chats {
+    border-radius: 25px;
     width: 500px;
     margin: auto;
     margin-top: 30px;
     text-align: left;
-    background: white;
+    background: #CCE9FE;
     padding: 50px 60px;
     border: solid #ddd;
     border-width: 0 1px 1px 1px;
@@ -133,9 +138,9 @@ form input[type=text] {
 }
 
 /*Dropdown*/
-/* Dropdown Button */
 .dropbtn {
-    background-color: #3498DB;
+    border-radius: 25px;
+    background-color: #333;
     color: white;
     padding: 16px;
     font-size: 16px;
@@ -143,28 +148,21 @@ form input[type=text] {
     cursor: pointer;
 }
 
-/* Dropdown button on hover & focus */
-.dropbtn:hover, .dropbtn:focus {
-    background-color: #2980B9;
-}
-
-/* The container <div> - needed to position the dropdown content */
 .dropdown {
     position: relative;
     display: inline-block;
 }
 
-/* Dropdown Content (Hidden by Default) */
 .dropdown-content {
+    border-radius: 25px;
     display: none;
     position: absolute;
-    background-color: #f1f1f1;
+    background-color: #f9f9f9;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
 }
 
-/* Links inside the dropdown */
 .dropdown-content a {
     color: black;
     padding: 12px 16px;
@@ -172,8 +170,12 @@ form input[type=text] {
     display: block;
 }
 
-/* Change color of dropdown links on hover */
-.dropdown-content a:hover {background-color: #ddd}
+.dropdown-content a:hover {background-color: #f1f1f1}
 
-/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
-.show {display:block;}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown:hover .dropbtn {
+    background-color: #3e8e41;
+}

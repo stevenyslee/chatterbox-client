@@ -4,10 +4,7 @@ var app = {
   server: 'http://parse.sfm6.hackreactor.com/chatterbox/classes/messages'
 };
 
-var test;
-
 app.init = function() {
-  
 };
 
 app.send = function(message) {
@@ -19,7 +16,6 @@ app.send = function(message) {
     contentType: 'application/json',
     success: function (data) {
       console.log('chatterbox: Message sent');
-      //location.reload();
     },
     error: function (data) {
       // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
@@ -56,13 +52,11 @@ app.fetch = function() {
     data: {order: '-createdAt'},
     contentType: 'application/json',
     success: function(data) {
-      console.log(data.results);
       for(var i = 0; i<data.results.length;i++){
         app.renderMessage(data.results[i]);
       }
     }
   });
-
 };
 
 app.clearMessages = function() {
@@ -72,46 +66,53 @@ app.clearMessages = function() {
 app.renderMessage = function(message) {
   var tweet = $('<div></div>');
   tweet.append('<span class=message>' + _.escape(message.text) + '</span>');
-  tweet.append('<span class=username> - ' + _.escape(message.username) + '</span>');
-  tweet.attr('id', message.roomname);
-  tweet.addClass('username');
+  tweet.append('<span class=username> - ' + message.username + '</span>');
+  tweet.addClass(message.roomname);
   $('#chats').prepend(tweet);
 };
 
 app.renderRoom = function(message) {
-  $('#roomSelect').prepend('<p>' + message.roomname + '</p>');
+  $('.dropdown-content').prepend('<a href="#">' + message.roomname + '</a>');
 };
 
+
+//Begin document functions
 $(document).ready(function() {
   let $body = $('body');
   
-  $('.clearMessages').on('click', function(event) {
+  $('.clearMessages').on('click', function() {
     app.clearMessages();
   });
   
-  $('.dropbtn').on('click', function(event) {
-    document.getElementById("myDropdown").classList.toggle("show");
+  // need to update roomlist to show all rooms from messages
+  // need to click room and show only messages from that chatroom
+  $('.add-room').on('click', function() {
+    var room = {};
+    var roomname = prompt("Please enter room name");
+    room.roomname = roomname;
+    if (room[roomname] !== null) {
+      app.renderRoom(room);
+    }
   });
-  
-  //fix friendslist
-  $('.username').on('click', function(event) {
-    $(this).parent().addClass('friendsList');
-  });
-  
-  $('.submitMessage').on('click', function(event) {
-    //var message = document.getElementById("submitContent").value;
-    var tempObj = {};
-    tempObj.username = 'null';
 
-      // console.log(window.location.search[0])
-    tempObj.text = message;
-    tempObj.roomname = 'null'; 
-    app.renderMessage(message);
+  //fix friendslist
+  //elements are being added after this event handler is added
+  $('.username').on('click', function() {
+    console.log(true);
   });
+  
+  //need to get username
+  //need to get roomname
+  var generateUserMessage = function(){
+    var text = $('.userInput').value;
+    var obj = {};
+    obj.message = text;
+    console.log(text);
+    app.renderMessage(obj);
+  }
 
   var generateMessages = function() {
     app.fetch(function(output) {
-      console.log(output);
     });
   }; 
   
@@ -123,21 +124,6 @@ $(document).ready(function() {
   // };
 
   // app.send(message);
-  generateMessages();
-  console.log(test);
-    
-  
+  generateMessages();    
 
 });
-
-// var message = {
-//   username: 'shawndrost',
-//   text: 'trololo',
-//   roomname: '4chan'
-// };
-
-// /parse/classes/<className>       POST  Creating Objects
-// /parse/classes/<className>/<objectId>  GET   Retrieving Objects
-// /parse/classes/<className>/<objectId>  PUT   Updating Objects
-// /parse/classes/<className>       GET   Queries
-// /parse/classes/<className>/<objectId>  DELETE  Deleting Objects

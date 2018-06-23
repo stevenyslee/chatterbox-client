@@ -24,28 +24,20 @@
     <script src="scripts/app.js"></script>
   </head>
   <body>
-      <div id="main">
-      <div class="friendsList"></div>  
-      <div class="dropdown">
-        <button class="dropbtn">Dropdown</button>
-        <div id="myDropdown" class="dropdown-content">
-          <a href="#">Link 1</a>
-          <a href="#">Link 2</a>
-          <a href="#">Add Room</a>
-        </div>
+    <h1>chatterbox</h1>
+    <div id="main">
+    <div class="dropdown">
+      <button class="dropbtn">Chatrooms</button>
+      <div id="myDropdown" class="dropdown-content">
+        <a href="#" class="add-room">Add Room</a>
       </div>
-      
-      <h1>chatterbox</h1>
-      <button href="#" class="clearMessages btn" clear-messages-function-name="makeBlinkyDancer">clear messages</button>
-      <form class='chatBox'>
-        Enter Chat<br>
-        <input class='submitContent' type="text" name="messageBox" value="">
-        <input class='submitMessage' type="submit" value="Submit">
-      </form> 
-      <div id="chats"></div>
-      <div id="roomSelect"></div>
-      <!-- Your HTML goes here! -->
-      
+    </div>
+    <button href="#" class="clearMessages btn">clear messages</button>
+    <form name="textInput" onsubmit="generateUserMessage();return false;">
+      Enter Chat Message: <input type="text" class="userInput"/>
+      <input type="submit" name="Submit" value="Submit"/>
+    </form>
+    <div id="chats"></div>      
     </div>
     
   </body>
