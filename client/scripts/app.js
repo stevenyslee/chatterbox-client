@@ -24,6 +24,11 @@ app.send = function(message) {
   });
 };
 
+// RegExp Escape
+RegExp.quote = function(str) {
+    return (str+'').replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&");
+};
+
 
 // List of HTML entities for escaping.
 var htmlEscapes = {
@@ -45,11 +50,12 @@ _.escape = function(string) {
   });
 };
 
+
 app.fetch = function() {
   $.ajax({
     url: app.server,
     type: 'GET',
-    data: {order: '-createdAt'},
+    data: {order: '-createdAt', limit: 50},
     contentType: 'application/json',
     success: function(data) {
       for(var i = 0; i<data.results.length;i++){
@@ -66,27 +72,55 @@ app.clearMessages = function() {
 app.renderMessage = function(message) {
   var tweet = $('<div></div>');
   var username = _.escape(message.username).replace(/\s/g, '')
-  tweet.append('<span class=message>' + _.escape(message.text) + '</span>');
-  tweet.append('<span class=username> - ' + message.username + '</span>');
-  tweet.addClass(message.roomname); 
-  tweet.addClass(username);  
+  
+  var escapedText = _.escape(message.text);
+  var escapedUsername = _.escape(message.username);
+  var excapedRoom = _.escape(message.roomname);
+  
+  var escapedMessage = {};
+  escapedMessage.text = escapedText;
+  escapedMessage.username = escapedUsername;
+  escapedMessage.roomname = excapedRoom;
+  
+  tweet.append('<span class=message>' + escapedText + '</span>');
+  tweet.append('<span class=username> - ' + escapedUsername + '</span>');
+  tweet.addClass(excapedRoom); 
+  tweet.addClass(escapedUsername);  
+  
   $('#chats').prepend(tweet);
+  app.renderRoom(escapedMessage);
   
-  
-  $('.username').click(function() {
+  tweet.click(function() {
     //fix friendslist
-    var classes = $(this).parent().attr('class').split(' ');
-    console.log(classes);
-    console.log(classes[1]);
-    $('.' + classes[1]).toggleClass('friendsList');
-  });
+    //console.log('tweet', this.classList[0]);
+    //var classes = $(this).parent().attr('class').split(' ');
+    // console.log(classes);
+    // console.log(classes[1]);
+    //l
+    if(!this.classList.contains('friendsList')){
+      this.classList.add('friendsList');  
+      $('.'+ this.username).toggleClass('friendslist');
+    }else{
+      this.classList.remove('friendsList');
+      $('.'+ this.username).toggleClass('friendslist');
+    }
   
+  });
 };
 
 
-
 app.renderRoom = function(message) {
-  $('.dropdown-content').prepend('<a href="#">' + message.roomname + '</a>');
+  var rooms = $('.dropdown-content').children().html();
+  console.log(rooms);
+  var duplicateRoomname = false;
+  for (var i = 0; i < rooms.length; i++) {
+    if (rooms[i] === message.roomname) {
+      duplicateRoomname = true;
+    }
+  }
+  if (!duplicateRoomname) {
+    $('.dropdown-content').prepend('<a href="#">' + message.roomname + '</a>');
+  }
 };
 
 //Begin document functions
@@ -103,7 +137,7 @@ $(document).ready(function() {
     var room = {};
     var roomname = prompt("Please enter room name");
     room.roomname = roomname;
-    if (room[roomname] !== null) {
+    if (room.roomname !== null) {
       app.renderRoom(room);
     }
   });
