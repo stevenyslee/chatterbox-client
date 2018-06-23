@@ -22,6 +22,7 @@
     <!-- your scripts -->
     <script src="env/config.js"></script>
     <script src="scripts/app.js"></script>
+    
   </head>
   <body>
     <h1>chatterbox</h1>
@@ -33,8 +34,8 @@
       </div>
     </div>
     <button href="#" class="clearMessages btn">clear messages</button>
-    <form name="textInput" onsubmit="generateUserMessage();return false;">
-      Enter Chat Message: <input type="text" class="userInput"/>
+    <form id='myform' name="messageInput">
+      Enter Chat Message: <input type="text" name="inputMessage", id="userInput"/>
       <input type="submit" name="Submit" value="Submit"/>
     </form>
     <div id="chats"></div>      

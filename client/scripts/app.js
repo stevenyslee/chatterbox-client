@@ -65,16 +65,29 @@ app.clearMessages = function() {
 
 app.renderMessage = function(message) {
   var tweet = $('<div></div>');
+  var username = _.escape(message.username).replace(/\s/g, '')
   tweet.append('<span class=message>' + _.escape(message.text) + '</span>');
   tweet.append('<span class=username> - ' + message.username + '</span>');
-  tweet.addClass(message.roomname);
+  tweet.addClass(message.roomname); 
+  tweet.addClass(username);  
   $('#chats').prepend(tweet);
+  
+  
+  $('.username').click(function() {
+    //fix friendslist
+    var classes = $(this).parent().attr('class').split(' ');
+    console.log(classes);
+    console.log(classes[1]);
+    $('.' + classes[1]).toggleClass('friendsList');
+  });
+  
 };
+
+
 
 app.renderRoom = function(message) {
   $('.dropdown-content').prepend('<a href="#">' + message.roomname + '</a>');
 };
-
 
 //Begin document functions
 $(document).ready(function() {
@@ -95,19 +108,26 @@ $(document).ready(function() {
     }
   });
 
-  //fix friendslist
-  //elements are being added after this event handler is added
-  $('.username').on('click', function() {
-    console.log(true);
+  $('#myform').submit(function(event){
+      generateUserMessage();
+      event.preventDefault();
   });
   
+  // document.getElementById('myForm').addEventListener("Submit", testfunc());
+  
+  var testfunc = function(){
+    console.log('test');
+  }
   //need to get username
   //need to get roomname
   var generateUserMessage = function(){
-    var text = $('.userInput').value;
+    var windowData = window.location.search;
+    var user = windowData.substring(windowData.indexOf('username=') + 9, windowData.length);
+    var text = document.getElementById('userInput').value;
     var obj = {};
-    obj.message = text;
-    console.log(text);
+    obj.text = text;
+    obj.username = user;
+    obj.roomname = 'lobby';
     app.renderMessage(obj);
   }
 
